@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import type { Article } from '../lib/newt';
+import { newtClient } from '../lib/newt';
+
+const { items: articles } = await newtClient.getContents<Article>({
+  appUid: 'blog',
+  modelUid: 'article',
+  query: {
+    select: ['title', 'slug', 'body'],
+  },
+})
+---
+
+<Layout title="Articles">
+  <main>
+    <ul>
+      {
+        articles.map((article) => {
+          return (
+            <li>
+              <a href={`/articles/${article.slug}`}>{article.title}</a>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </main>
+</Layout>
